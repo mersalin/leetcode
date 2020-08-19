@@ -1,11 +1,20 @@
 class Solution {
     public int maxSubArray(int[] nums) {
-        int max_so_far = nums[0]; 
-        int curr_max = nums[0]; 
-        for (int i = 1; i < nums.length; i++)  { 
-            curr_max = Math.max(nums[i], curr_max + nums[i]); 
-            max_so_far = Math.max(max_so_far, curr_max); 
-        } 
-        return max_so_far;
+        int n = nums.length;
+        
+        if(n == 0) {
+         return 0;   
+        }
+        
+        int dp[] = new int[n];
+        dp[0] = nums[0];
+        int max = dp[0];
+        
+        for (int i=1; i<n; i++) {
+            dp[i] = nums[i] + (dp[i-1] > 0 ? dp[i-1] : 0);
+            max = Math.max(max, dp[i]);
+        }
+        
+        return max;
     }
 }
