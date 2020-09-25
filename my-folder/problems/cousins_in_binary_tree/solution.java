@@ -1,45 +1,47 @@
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
- * }
- */
 class Solution {
-    TreeNode xParent = null;
-    TreeNode yParent = null;
-    int xDepth = -1;
-    int yDepth = -1;
-    
-    public boolean isCousins(TreeNode root, int x, int y) {
-        getDepthAndParent(root, x, y, 0, null);
-        return xDepth == yDepth && xParent != yParent ? true : false;
+  public boolean isCousins(TreeNode root, int x, int y) {
+    if (root == null) {
+      return false;
     }
-    
-    private void getDepthAndParent(TreeNode root, int x, int y, int depth, TreeNode parent) {
-        if(root == null) {
-            return;
+
+    Queue <TreeNode> queue = new LinkedList<>();
+    queue.offer(root);
+    while (!queue.isEmpty()) {
+      boolean xFound = false;
+      boolean yFound = false;
+      int size = queue.size();
+      for (int i = 0; i < size; i++) {
+        TreeNode cur = queue.poll();
+        TreeNode right = cur.right;
+        TreeNode left = cur.left;
+
+        if (cur.val == x) {
+          xFound = true;
         }
-        
-        if(root.val == x) {
-            xDepth = depth;
-            xParent = parent;
-        } else if(root.val == y) {
-            yDepth = depth;
-            yParent = parent;
+
+        if (cur.val == y) {
+          yFound = true;
         }
-        
-        getDepthAndParent(root.left, x, y, depth+1, root);
-        getDepthAndParent(root.right, x, y, depth+1, root);
-        
+
+        if (left != null && right != null) {
+          if (left.val == x && right.val == y) {
+            return false;
+          }
+          if (left.val == y && right.val == x) {
+            return false;
+          }
+        }
+        if (right != null) {
+          queue.offer(right);
+        }
+        if (left != null) {
+          queue.offer(left);
+        }
+      }
+      if (xFound && yFound) {
+        return true;
+      }
     }
-    
+    return false;
+  }
 }
