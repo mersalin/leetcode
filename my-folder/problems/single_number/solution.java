@@ -1,9 +1,18 @@
 class Solution {
     public int singleNumber(int[] nums) {
-        int result = 0;
-        for(int n : nums) {
-            result ^= n;
+        int n = nums.length;
+        Arrays.sort(nums);
+        int index = 0;
+        while(index < n) {
+            int val = nums[index];
+            if (index == n-1) {
+                return nums[index];
+            }else if (val == nums[index+1]) {
+                index += 2;
+            } else {
+                return val;
+            }
         }
-        return result;
+        return nums[0];
     }
 }
