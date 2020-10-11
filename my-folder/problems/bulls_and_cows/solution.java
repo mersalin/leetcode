@@ -1,26 +1,29 @@
 class Solution {
     public String getHint(String secret, String guess) {
-        Map<Character, Integer> map = new HashMap<>();
-        int[] result = new int[2];
-        for (int i=0; i<secret.length(); i++) {
-            char c = secret.charAt(i);
-            map.put(c, map.getOrDefault(c, 0) + 1);
-        }
         
-        for(int i=0; i<secret.length(); i++) {
-            if( secret.charAt(i) == guess.charAt(i)) {
-                result[0]++;
-                if(map.get(guess.charAt(i)) <= 0) {
-                    result[1]--;
-                }
-                 map.put(guess.charAt(i), map.get(guess.charAt(i)) - 1);
-            } else {
-                if (map.get(guess.charAt(i)) != null && map.get(guess.charAt(i)) > 0) {
-                    result[1]++;
-                    map.put(guess.charAt(i), map.get(guess.charAt(i)) - 1);
-                }
+        int n = secret.length();
+        int[] digits = new int[10];
+        int bulls = 0;
+        int cows = 0;
+        
+        for (int i=0; i<n; i++) {
+            digits[secret.charAt(i) - '0']++;
+        }
+    
+        for (int i =0; i<n; i++) {
+            if (secret.charAt(i) == guess.charAt(i)) {
+                digits[secret.charAt(i) - '0']--;
+                bulls++;
             }
         }
-        return result[0]+"A"+result[1] + "B";
+        
+        for (int i =0; i<n; i++) {
+            if(secret.charAt(i) != guess.charAt(i) && secret.indexOf(guess.charAt(i)) >= 0 && digits[guess.charAt(i) - '0'] > 0) { 
+                digits[guess.charAt(i) - '0']--;
+                cows++;
+            }
+        }
+        
+        return bulls + "A" + cows + "B";
     }
 }
