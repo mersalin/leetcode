@@ -1,17 +1,21 @@
 class Solution {
     public int firstUniqChar(String s) {
-	int[] letters = new int[26];
-
-	for (int i=0; i<s.length(); i++) {
-		letters[s.charAt(i) - 'a']++;
-	}
-
-	for (int i=0; i<s.length(); i++) {
-		if (letters[s.charAt(i) - 'a' ]== 1) {
-			return i;
-		}
-	}
-	return -1;
+        int[] alpha = new int[26];
         
+        int index = 0;
+        
+        for (char c : s.toCharArray()) {
+            index = c - 'a';
+            alpha[index] = alpha[index] + 1;
+        }
+        
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            index = c - 'a';
+            if(alpha[index] == 1) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
